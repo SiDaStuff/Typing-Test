@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Typing Game</title>
+	<style>
+		body {
+			text-align: center;
+		}
+		#game {
+			display: none;
+		}
+	</style>
+</head>
+<body>
+	<h1>Typing Game</h1>
+	<button onclick="startGame()">Start Game</button>
+	<div id="game">
+		<p>Type the following text:</p>
+		<p id="text">This text that you are typing right now will determine your WPM and accuracy when you finish. All right, finish!</p>
+		<input type="text" id="input" oninput="checkInput()">
+		<p>WPM: <span id="wpm">0</span></p>
+		<p>Accuracy: <span id="accuracy">0</span>%</p>
+	</div>
+	<script>
+		let startTime, endTime;
+
+		function startGame() {
+			document.getElementById('game').style.display = 'block';
+			startTime = new Date();
+		}
+
+		function checkInput() {
+			let text = document.getElementById('text').textContent;
+			let input = document.getElementById('input').value;
+			let words = input.split(' ');
+			let errors = 0;
+
+			for (let i = 0; i < words.length; i++) {
+				if (words[i] !== text.split(' ')[i]) {
+					errors++;
+				}
+			}
+
+			let accuracy = ((words.length - errors) / words.length) * 100;
+			document.getElementById('accuracy').textContent = accuracy.toFixed(2);
+
+			if (input === text) {
+				endTime = new Date();
+				let timeDiff = (endTime - startTime) / 1000;
+				let wpm = (words.length / timeDiff) * 60;
+				document.getElementById('wpm').textContent = wpm.toFixed(0);
+				document.getElementById('input').disabled = true;
+			}
+		}
+	</script>
+</body>
+</html>
